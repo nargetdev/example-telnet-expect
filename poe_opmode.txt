@@ -1,0 +1,2 @@
+poe opmode shutdown
+poe opmode auto

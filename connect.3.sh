@@ -4,7 +4,10 @@
 # if it all goes pear shaped the script will timeout after 20 seconds.
 set timeout 20
 # first argument is assigned to the variable name
-set name "10.200.1.242"
+set name [lindex $argv 0]
+puts "connecting: $name"
+
+# exit
 # second argument is assigned to the variable user
 set user "ubnt"
 # third argument is assigned to the variable password
@@ -22,8 +25,8 @@ close $f
 # this spawns the telnet program and connects it to the variable name
 spawn telnet $name 
 
-expect "Trying 10.200.1.254..."
-expect "Connected to 10.200.1.254."
+expect "Trying"
+expect "Connected"
 expect "Escape character is '^]'."
 expect ""
 expect "User:"
@@ -44,8 +47,8 @@ expect "(UBNT EdgeSwitch) #"
 # -----------------------------------------------------------------------------
 # iterate over the commands
 
-set count 10;
-set sleep 1;
+set count 1;
+set sleep 0.01;
 while {$count > 0 } {
 	puts "count : $count\n";
 	set count [expr $count-1];
@@ -58,10 +61,16 @@ while {$count > 0 } {
 	sleep $sleep
 }
 
+send "configure\r"
+expect "(UBNT EdgeSwitch) (Config)#" 
+send "interface 0/1-0/24\r"
+expect "(UBNT EdgeSwitch) (Interface 0/1-0/24)#"
+
+
 # -----------------------------------------------------------------------------
 # close the connection
-# send "quit\r"
-# close
+#send "quit\r"
+#close
 
 # -----------------------------------------------------------------------------
 # instead of closing the connection, it would also be possible to hand the
